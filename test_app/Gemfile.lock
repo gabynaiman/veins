@@ -1,0 +1,24 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ansi (1.4.3)
+    docile (1.1.2)
+    minitest (4.7.5)
+    multi_json (1.8.4)
+    rake (10.1.1)
+    simplecov (0.8.2)
+      docile (~> 1.1.0)
+      multi_json
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
+    turn (0.9.6)
+      ansi
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest (~> 4.7)
+  rake
+  simplecov
+  turn (~> 0.9)
