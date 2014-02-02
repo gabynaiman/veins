@@ -39,4 +39,3 @@ class FakeAutenticationService
     password == '1234'
   end
 end
-
