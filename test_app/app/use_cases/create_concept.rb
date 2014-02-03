@@ -6,12 +6,6 @@ class CreateConcept < Veins::UseCase
     attr_reader :language
     attr_reader :patterns
 
-    def initialize(attributes)
-      @name = attributes[:name]
-      @language = attributes[:language]
-      @patterns = attributes[:patterns]
-    end
-
     private
 
     def validate(errors)

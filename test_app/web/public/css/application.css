@@ -1,0 +1,20 @@
+body {
+  padding-top: 30px;
+}
+
+.tree ul {
+  padding: 0;
+  list-style: none;
+}
+
+.tree ul li {
+  margin-left: 20px;
+}
+
+.tree > ul > li {
+  margin-left: 0;
+}
+
+.tree ul li span {
+  cursor: pointer;
+}

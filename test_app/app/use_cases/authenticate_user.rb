@@ -5,17 +5,15 @@ class AuthenticateUser < Veins::UseCase
     attr_reader :email
     attr_reader :password
 
-    def initialize(attributes)
-      @email = attributes[:email]
-      @password = attributes[:password]
-    end
-
     private
 
     def validate(errors)
-      errors[:email] << :cant_be_blank if email.empty?
-      errors[:email] << :invalid unless email.match /.+@.+\..+/
-      errors[:password] << :blank if password.empty?
+      if email.nil? || email.empty?
+        errors[:email] << :blank 
+      else
+        errors[:email] << :invalid unless email.match /.+@.+\..+/
+      end
+      errors[:password] << :blank if password.nil? || password.empty?
     end
 
   end

@@ -1,18 +1,14 @@
 module Veins
   class UseCase
 
-    extend Configurable
-
-    attr_config :repository
-
     attr_reader :form
 
     def initialize(form)
       @form = form
     end
 
-    def self.run!(form)
-      new(form).run!
+    def self.run!(params)
+      new(form(params)).run!
     end
 
     def run!
@@ -23,8 +19,13 @@ module Veins
 
     private
 
+    def self.form(params)
+      puts params
+      const_get(:Form).new params
+    end
+
     def repository
-      UseCase.repository
+      Tenant.current.repository
     end
 
   end
