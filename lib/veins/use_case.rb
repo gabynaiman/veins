@@ -7,14 +7,14 @@ module Veins
       @form = form
     end
 
-    def self.run!(params)
-      new(form(params)).run!
-    end
-
     def run!
       form.validate!
       validate if respond_to? :validate
       run
+    end
+
+    def self.run!(params)
+      new(form(params)).run!
     end
 
     private
