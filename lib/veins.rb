@@ -1,4 +1,2 @@
 require 'veins/version'
-
-module Veins
-end
+require 'veins/persistence'
