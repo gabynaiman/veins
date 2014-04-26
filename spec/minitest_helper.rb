@@ -8,6 +8,7 @@ require 'veins/persistence/adapters/in_memory'
 class Model < Module
   def initialize(*attributes)
     define_method :initialize do |params={}|
+      set_defaults if respond_to? :set_defaults
       params.each do |attr, value|
         public_send "#{attr}=", value
       end
@@ -21,6 +22,9 @@ end
 
 class Country
   include Model.new :id, :name, :cities
+  def set_defaults
+    @cities = []
+  end
 end
 
 class City

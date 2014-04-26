@@ -46,19 +46,21 @@ module Veins
         end
 
         def execute(query)
-          all(query.model_class).select do |model|
+          collections[query.model_class].values.select do |data|
             query.conditions.inject(true) do |bool, condition|
-              model.public_send(condition.attribute).public_send(condition.operator, condition.value)
+              data[condition.attribute].public_send(condition.operator, condition.value)
             end
           end.sort do |a,b|
             bits = query.orders.map do |order|
               if order.asc?
-                a.public_send(order.attribute) <=> b.public_send(order.attribute)
+                a[order.attribute] <=> b[order.attribute]
               else
-                b.public_send(order.attribute) <=> a.public_send(order.attribute)
+                b[order.attribute] <=> a[order.attribute]
               end
             end
             bits.detect { |e| e != 0 } || 0
+          end.map do |data|
+            deserialize query.model_class, data
           end
         end
 
@@ -98,9 +100,13 @@ module Veins
             collection.references.each do |reference|
               ref_id = data["#{reference.name}_id".to_sym]
               if ref_id
-                ref_model = LazyModel.new mapper.adapter_for(model_class), reference.model_class, ref_id
+                ref_model = LazyModel.new mapper.adapter_for(reference.model_class), reference.model_class, ref_id
                 model.public_send "#{reference.name}=", ref_model
               end          
+            end
+
+            collection.lists.each do |list|
+              model.public_send "#{list.name}=", LazyList.new(mapper.adapter_for(list.model_class), list.model_class, "#{model_class.name.downcase}_id".to_sym, data[:id])
             end
           end
         end

@@ -104,6 +104,25 @@ describe Veins::Persistence::Adapters::InMemory do
     reference.reload.name.must_equal country.name
   end
 
-  it 'List association'
+  it 'List association' do
+    country = Country.new name: 'Argentina'
+    adapter.create Country, country
+
+    country.cities.must_equal []
+
+    adapter.create City, City.new(name: 'Bs.As.', country: country)
+    adapter.create City, City.new(name: 'Rosario', country: country)
+
+    country = adapter.find Country, country.id
+
+    country.cities.loaded?.must_equal false
+    country.cities.map(&:name).must_equal ['Bs.As.', 'Rosario']
+    country.cities.loaded?.must_equal true
+
+    adapter.create City, City.new(name: 'Cordoba', country: country)
+
+    country.cities.map(&:name).wont_equal ['Bs.As.', 'Rosario', 'Cordoba']
+    country.cities.reload.map(&:name).must_equal ['Bs.As.', 'Rosario', 'Cordoba']
+  end
 
 end
