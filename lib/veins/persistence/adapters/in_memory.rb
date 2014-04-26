@@ -96,9 +96,9 @@ module Veins
             end
 
             collection.references.each do |reference|
-              ref_key = "#{reference.name}_id".to_sym
-              if data[ref_key]
-                ref_model = mapper.adapter_for(model_class).find(reference.model_class, data[ref_key])
+              ref_id = data["#{reference.name}_id".to_sym]
+              if ref_id
+                ref_model = LazyModel.new mapper.adapter_for(model_class), reference.model_class, ref_id
                 model.public_send "#{reference.name}=", ref_model
               end          
             end
