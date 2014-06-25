@@ -2,7 +2,7 @@ require 'generic_visitor'
 
 module Condition
 
- class Equal
+  class Equal
 
     attr_reader :attribute, :value
     

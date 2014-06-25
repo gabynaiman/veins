@@ -4,6 +4,7 @@ require 'minitest/autorun'
 
 require 'veins'
 require 'veins/persistence/adapters/in_memory'
+require 'veins/persistence/adapters/sql'
 
 class Model < Module
   def initialize(*attributes)
