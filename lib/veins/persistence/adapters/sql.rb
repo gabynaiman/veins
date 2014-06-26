@@ -13,12 +13,12 @@ module Veins
         end
 
         def create(model_class, model)
-          id = collection(model_class).insert serialize(model)
+          id = collection(model_class).insert serialize(model_class, model)
           model.id = id
         end
 
         def update(model_class, model)
-          collection(model_class).where(id: model.id).update(serialize(model))
+          collection(model_class).where(id: model.id).update(serialize(model_class, model))
         end
 
         def delete(model_class, id)
@@ -26,7 +26,7 @@ module Veins
         end
 
         def all(model_class)
-          collection(model_class).all
+          collection(model_class).all.map { |m| deserialize model_class, m }
         end
 
         def find(model_class, id)
@@ -42,11 +42,11 @@ module Veins
         end
 
         def serialize(model_class, model)
-          collection(model_class).serialize(model)
+          mapper.collections[model_class].serialize(model)
         end
 
         def deserialize(model_class, data)
-          collection(model_class).deserialize(model, mapper)
+          mapper.collections[model_class].deserialize(data, mapper)
         end
 
       end

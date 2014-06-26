@@ -69,39 +69,40 @@ describe Veins::Persistence::Adapters::SQL do
     adapter.create Country, Country.new(name: 'Argentina')
     adapter.create Country, Country.new(name: 'Uruguay')
 
-    adapter.all(Country).map{|c| c[:name]}.must_equal %w(Argentina Uruguay)
+    adapter.all(Country).map(&:name).must_equal %w(Argentina Uruguay)
   end
 
   it 'Create' do
-    skip
     country = Country.new name: 'Argentina'
     adapter.create Country, country
 
     country.id.wont_be_nil
-    find(Country, country.id)[:name].must_equal 'Argentina'
+    adapter.find(Country, country.id).name.must_equal 'Argentina'
   end
   
   it 'Update' do
-    skip
     country = Country.new name: 'Argentina'
     
     adapter.create Country, country
-    find(Country, country.id)[:name].must_equal 'Argentina'
+    adapter.find(Country, country.id).name.must_equal 'Argentina'
 
     country.name = 'Uruguay'
     adapter.update Country, country
-    find(Country, country.id)[:name].must_equal 'Uruguay' 
+    adapter.find(Country, country.id).name.must_equal 'Uruguay' 
   end
   
   it 'Delete' do
-    skip
-    country = Country.new name: 'Argentina'
-    
-    adapter.create Country, country
-    find(Country, country.id)[:name].must_equal 'Argentina'
+    argentina = Country.new name: 'Argentina'
+    adapter.create Country, argentina
 
-    adapter.delete Country, country.id
-    find(Country, country.id).must_be_nil
+    uruguay = Country.new name: 'Uruguay'
+    adapter.create Country, uruguay
+    
+    adapter.all(Country).map(&:name).must_equal %w(Argentina Uruguay)
+
+    adapter.delete Country, argentina.id
+    
+    adapter.all(Country).map(&:name).must_equal %w(Uruguay)
   end
 
   it 'Query' do
